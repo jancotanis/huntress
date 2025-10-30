@@ -8,7 +8,7 @@ module Huntress
   # @private
   class API
     # @private
-    attr_accessor *WrAPI::Configuration::VALID_OPTIONS_KEYS
+    attr_accessor(*WrAPI::Configuration::VALID_OPTIONS_KEYS)
 
     # Creates a new API and copies settings from singleton
     def initialize(options = {})

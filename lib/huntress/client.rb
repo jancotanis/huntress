@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require File.expand_path('api', __dir__)
-#require File.expand_path('asset_helper', __dir__)
 
 module Huntress
   # The Client class serves as a wrapper for the Hudu REST API, providing methods to interact
@@ -16,7 +15,6 @@ module Huntress
   #   client.update_company(1, { name: "Updated Company" }) # Update a company
   #   client.create_company({ name: "New Company" }) # Create a new company
   class Client < API
-
     # Dynamically defines methods for interacting with Hudu API resources.
     #
     # Depending on the arguments, this will define methods to:
@@ -36,21 +34,14 @@ module Huntress
     #   # - `company(id, params = {})` to fetch a single company by ID.
     #   # - `update_companies(id, params = {})` to update a company.
     #   # - `create_companies(params = {})` to create a new company.
-    def self.api_endpoint(method, singular_method = nil, path = method)
-      if singular_method
-        # Define method to fetch all records and one by id
-        send(:define_method, method) do |params = {}|
-          r = get_paged(api_url(path), params)
-        end
-        # Define method to fetch a single record by ID
-        send(:define_method, singular_method) do |id, params = {}|
-          r = get(api_url("#{path}/#{id}"), params)
-        end
-      else
-        # Define simple method to fetch data
-        send(:define_method, method) do |params = {}|
-          get(api_url(path), params)
-        end
+    def self.api_endpoint(method, singular_method, path = method)
+      # Define method to fetch all records and one by id
+      send(:define_method, method) do |params = {}|
+        get_paged(api_url(path), params)
+      end
+      # Define method to fetch a single record by ID
+      send(:define_method, singular_method) do |id, params = {}|
+        get(api_url("#{path}/#{id}"), params)
       end
     end
 
@@ -67,7 +58,6 @@ module Huntress
     end
 
     def remediations(incident_report_id, options = {})
-      #get_paged(api_url("incident_reports/#{incident_report_id}/remediations"), options)
       remediation(incident_report_id, nil, options)
     end
 
@@ -79,7 +69,6 @@ module Huntress
     api_endpoint :reports, :report
     api_endpoint :signals, :signal
 
-
     # Constructs the full API URL for a given path.
     #
     # @param path [String] The API path.
@@ -87,6 +76,5 @@ module Huntress
     def api_url(path)
       "/v1/#{path}"
     end
-
   end
 end

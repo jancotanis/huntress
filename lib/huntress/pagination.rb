@@ -61,7 +61,7 @@ module Huntress
       def more_pages?
         # while full page we have next page
         if @pagination_data
-          @page_token = @pagination_data["next_page_token"]
+          @page_token = @pagination_data['next_page_token']
         else
           @page.eql? 1
         end
@@ -91,18 +91,15 @@ module Huntress
       # @return Hash Returns the extracted data, which could be an array, hash, or other object.
       #
       # @example
-      #   response_body = { 
+      #   response_body = {
       #     "items" => [1, 2, 3],
-      #     "pagination" => {"current_page" => 1, "current_page_count": 10, "limit": 10, "total_count":60, "next_page": 2,
-      #     "next_page_url": "https://api.xx.io/v1/signals?page_token=NjEyNjgxMzE%3D&limit=10", "next_page_token": "NjEyNjgxMzE=" } }
+      #     "pagination" => {"current_page" => 1, "current_page_count": 10, "limit": 10, "total_count":60,
+      #     "next_page": 2, "next_page_url": "https://api.xx.io/v1/signals?page_token=NjEyNjgxMzE%3D&limit=10",
+      #     "next_page_token": "NjEyNjgxMzE=" } }
       #   PaginationPager.pagination_data(response_body) # => {"current_page" => 1, "current_page_count": 10, ...
       def self.pagination_data(body)
         # assume hash {"resource":[...], "pagination":{}}, return pagination data
-        result = nil
-        if body.is_a?(Hash)
-          result = body["pagination"]
-        end
-        result
+        body.is_a?(Hash) ? body['pagination'] : nil
       end
     end
   end
